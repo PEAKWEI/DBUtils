@@ -10,10 +10,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
+import javax.sql.rowset.CachedRowSet;
 
 import org.apache.commons.dbutils.QueryRunner;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.sun.rowset.CachedRowSetImpl;
 
 /**
  * @author DGW
@@ -27,6 +29,7 @@ public class DbUtils {
 	private static String username;
 	private static String password;
 	private static DataSource dataSource;
+	private static CachedRowSetImpl caImpl;
 
 	static {
 		try {
@@ -39,6 +42,18 @@ public class DbUtils {
 			new RuntimeException("数据库连接失败！");
 		}
 
+	}
+	/**
+	 * 
+	 * @return 行集
+	 * @throws SQLException
+	 */
+	public static CachedRowSet getCacheRowset() throws SQLException {
+		caImpl=new CachedRowSetImpl();
+		caImpl.setUrl(url);
+		caImpl.setUsername(username);
+		caImpl.setPassword(password);
+		return caImpl;
 	}
 
 	/*
@@ -117,6 +132,9 @@ public class DbUtils {
 
 	}
 
+	/*
+	 * 读取数据库配置文件
+	 */
 	private static void readInfo() throws IOException {
 		InputStream in = DbUtils.class.getClassLoader().getResourceAsStream("dbutils.properties");
 		Properties pro = new Properties();

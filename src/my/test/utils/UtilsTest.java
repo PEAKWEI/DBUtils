@@ -5,16 +5,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.sql.RowSet;
 import javax.sql.rowset.CachedRowSet;
 
-import com.mysql.jdbc.CachedResultSetMetaData;
+import org.junit.Test;
+
 import com.sun.rowset.CachedRowSetImpl;
+
 import my.dbutils.jdbc.DbUtils;
 
-@SuppressWarnings("unused")
 public class UtilsTest {
-	public static void main(String[] args) throws SQLException {
+	
+	@Test
+	public void testRowSet() throws SQLException {
+		CachedRowSet rowset = DbUtils.getCacheRowset();
+		rowset.setCommand("select * from user");
+		rowset.execute();
+		while (rowset.next()) {
+			System.out.println(rowset.getString("username"));
+		}
+	}
+	
+	
+	public static void m(String[] args) throws SQLException {
 		// 利用行集进行查询
 		/*
 		 * CachedRowSet cachedata=new CachedRowSetImpl();
